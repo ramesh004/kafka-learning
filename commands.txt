@@ -1,0 +1,86 @@
+Set-Location C:\kafka
+
+$env:PATH="C:\Windows\System32;C:\Windows;C:\Program Files\Microsoft\jdk-17.0.21.21-hotspot\bin"
+
+$env:KAFKA_HEAP_OPTS="-Xms512M -Xmx512M"
+
+.\bin\windows\kafka-server-start.bat .\config\kraft\server.properties
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+List topics:
+
+Set-Location C:\kafka
+
+$env:PATH="C:\Windows\System32;C:\Windows;C:\Program Files\Microsoft\jdk-17.0.21.21-hotspot\bin"
+
+.\bin\windows\kafka-topics.bat `
+--list `
+--bootstrap-server localhost:9092
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+create topics:
+
+Set-Location C:\kafka
+
+.\bin\windows\kafka-topics.bat `
+--create `
+--topic test-topic `
+--bootstrap-server localhost:9092 `
+--partitions 1 `
+--replication-factor 1
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+producer:
+
+
+
+Set-Location C:\kafka
+
+$env:PATH="C:\Windows\System32;C:\Windows;C:\Program Files\Microsoft\jdk-17.0.21.21-hotspot\bin"
+
+.\bin\windows\kafka-console-producer.bat `
+--topic test-topic `
+--bootstrap-server localhost:9092
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+consumer :
+
+Set-Location C:\kafka
+
+$env:PATH="C:\Windows\System32;C:\Windows;C:\Program Files\Microsoft\jdk-17.0.21.21-hotspot\bin"
+
+.\bin\windows\kafka-console-consumer.bat `
+--topic test-topic `
+--bootstrap-server localhost:9092 `
+--from-beginning
+
+-----------------------------------
+
+PS C:\Users\Ramesh> netstat -ano | findstr 9092
+  TCP    0.0.0.0:9092           0.0.0.0:0              LISTENING       18588
+  TCP    127.0.0.1:9092         127.0.0.1:50935        ESTABLISHED     18588
+  TCP    127.0.0.1:9092         127.0.0.1:50936        ESTABLISHED     18588
+  TCP    127.0.0.1:9092         127.0.0.1:53158        ESTABLISHED     18588
+  TCP    127.0.0.1:9092         127.0.0.1:57167        ESTABLISHED     18588
+  TCP    127.0.0.1:9092         127.0.0.1:57168        ESTABLISHED     18588
+  TCP    127.0.0.1:50935        127.0.0.1:9092         ESTABLISHED     38160
+  TCP    127.0.0.1:50936        127.0.0.1:9092         ESTABLISHED     38160
+  TCP    127.0.0.1:53158        127.0.0.1:9092         ESTABLISHED     38160
+  TCP    127.0.0.1:57167        127.0.0.1:9092         ESTABLISHED     38524
+  TCP    127.0.0.1:57168        127.0.0.1:9092         ESTABLISHED     38524
+  TCP    [::]:9092              [::]:0                 LISTENING       18588
+PS C:\Users\Ramesh>
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+.\bin\windows\kafka-console-consumer.bat ^
+--topic employee-avro ^
+--from-beginning ^
+--bootstrap-server localhost:9092
